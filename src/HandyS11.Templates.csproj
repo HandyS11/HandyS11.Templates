@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <PackageId>HandyS11.Templates</PackageId>
+    <Title>HandyS11 Templates</Title>
+    <Authors>HandyS11</Authors>
+    <Copyright>Copyright(c) HandyS11</Copyright>
+    <Description>Some templates</Description>
+    <PackageTags>template;templates</PackageTags>
+    <PackageProjectUrl>https://github.com/HandyS11/HandyS11.Templates</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HandyS11/HandyS11.Templates.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <Version>0.1.0</Version>
+    <IsPackable>true</IsPackable>
+
+    <PackageType>Template</PackageType>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+
+    <PackageLicenseExpression>UNLICENCED</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LocalizeTemplates>false</LocalizeTemplates>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TemplateEngine.Tasks" Version="7.0.120" PrivateAssets="all" IsImplicitlyDefined="true"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="content\**\*" Exclude="content\**\bin\**;content\**\obj\**"/>
+    <Compile Remove="**\*"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+</Project>
