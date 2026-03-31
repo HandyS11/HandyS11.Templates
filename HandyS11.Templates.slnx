@@ -5,5 +5,10 @@
     <File Path="NuGet.config"/>
     <File Path="README.md"/>
   </Folder>
-  <Project Path="src/HandyS11.Templates.csproj"/>
+  <Folder Name="/src/">
+    <Project Path="src/HandyS11.Templates.csproj"/>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HandyS11.Templates.Tests.csproj"/>
+  </Folder>
 </Solution>
