@@ -24,11 +24,11 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Version: $VERSION"
 
-      - name: Update Directory.Build.props version
+      - name: Update HandyS11.Templates.csproj
         run: |
           sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.get_version.outputs.version }}<\/Version>/" ./src/HandyS11.Templates.csproj
-          echo "Updated Directory.Build.props:"
-          grep "<Version>" Directory.Build.props
+          echo "Updated HandyS11.Templates.csproj:"
+          grep "<Version>" ./src/HandyS11.Templates.csproj
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4

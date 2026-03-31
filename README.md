@@ -8,6 +8,12 @@ A .NET template package providing project and item templates for use with the `d
 dotnet new install HandyS11.Templates
 ```
 
+## Update
+
+```bash
+dotnet new update HandyS11.Templates
+```
+
 ## Templates
 
 ### `handys11-solution` — Empty Solution
