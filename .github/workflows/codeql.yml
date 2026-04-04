@@ -20,9 +20,6 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-        with:
-          cache: true
-          cache-dependency-path: Directory.Packages.props
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
