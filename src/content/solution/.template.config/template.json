@@ -16,7 +16,7 @@
     },
     "sourceName": "HandyS11.Solution",
     "preferNameDirectory": true,
-    "icon": "icon.png",
+  "icon": "../icon.png",
     "sources": [
         {
             "exclude": [

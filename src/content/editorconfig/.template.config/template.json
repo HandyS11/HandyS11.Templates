@@ -14,7 +14,7 @@
     },
     "sourceName": "HandyS11.editorconfig",
     "preferNameDirectory": false,
-    "icon": "icon.png",
+  "icon": "../icon.png",
     "sources": [
         {
             "exclude": [
