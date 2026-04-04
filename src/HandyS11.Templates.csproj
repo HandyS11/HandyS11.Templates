@@ -28,6 +28,7 @@
 
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>content/icon.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup>
