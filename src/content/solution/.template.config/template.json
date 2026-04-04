@@ -1,34 +1,44 @@
 {
-    "$schema": "http://json.schemastore.org/template",
-    "author": "HandyS11",
-    "owner": "HandyS11",
-    "classifications": ["Solution"],
-    "identity": "HandyS11.Solution",
-    "name": "Empty Solution",
-    "shortName": "handys11-solution",
-    "description": "A starter kit to create an empty solution.",
-    "tags": {
-        "language": "C#",
-        "type": "project",
-        "projectType": "solution",
-        "platform": ["Windows", "Linux", "macOS"],
-        "capability": ["solution", "starter-kit", "cross-platform"]
-    },
-    "sourceName": "HandyS11.Solution",
-    "preferNameDirectory": true,
-  "icon": "../icon.png",
-    "sources": [
-        {
-            "exclude": [
-                "**.template.config/**"
-            ],
-            "modifiers": [
-                {
-                    "replacements": {
-                        "HandyS11.Solution": "{namespace}"
-                    }
-                }
-            ]
-        }
+  "$schema": "http://json.schemastore.org/template",
+  "author": "HandyS11",
+  "owner": "HandyS11",
+  "classifications": [
+    "Solution"
+  ],
+  "identity": "HandyS11.Solution",
+  "name": "Empty Solution",
+  "shortName": "handys11-solution",
+  "description": "A starter kit to create an empty solution.",
+  "tags": {
+    "language": "C#",
+    "type": "project",
+    "projectType": "solution",
+    "platform": [
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "capability": [
+      "solution",
+      "starter-kit",
+      "cross-platform"
     ]
+  },
+  "sourceName": "HandyS11.Solution",
+  "preferNameDirectory": true,
+  "icon": "../icon.png",
+  "sources": [
+    {
+      "exclude": [
+        "**.template.config/**"
+      ],
+      "modifiers": [
+        {
+          "replacements": {
+            "HandyS11.Solution": "{namespace}"
+          }
+        }
+      ]
+    }
+  ]
 }
