@@ -515,3 +515,7 @@ $RECYCLE.BIN/
 
 # Stryker.NET mutation testing output
 StrykerOutput/
+
+# Temp files
+tmp/
+temp/

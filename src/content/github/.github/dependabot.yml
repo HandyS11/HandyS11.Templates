@@ -5,13 +5,19 @@
 
 version: 2
 updates:
-  # NuGet: the repo's own build/test dependencies (src + tests).
+  # NuGet
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
 
-  # GitHub Actions used by the CI / CD / CodeQL workflows.
+  # .NET SDK pin (global.json).
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

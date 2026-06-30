@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "HandyS11",
+  "owner": "HandyS11",
+  "classifications": [
+    "Config",
+    "CI/CD"
+  ],
+  "identity": "HandyS11.github",
+  "name": "GitHub Workflows",
+  "shortName": "handys11-github",
+  "description": "GitHub Actions workflows (CI, CD, Sonar, Mutation, Documentation) and Dependabot configuration for the HandyS11 templates.",
+  "tags": {
+    "type": "item",
+    "platform": [
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "capability": [
+      "starter-kit",
+      "cross-platform"
+    ]
+  },
+  "sourceName": "Project1",
+  "preferNameDirectory": false,
+  "icon": "../icon.png",
+  "sources": [
+    {
+      "exclude": [
+        "**/.template.config/**"
+      ]
+    }
+  ]
+}

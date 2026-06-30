@@ -40,6 +40,7 @@ This repo is a **NuGet template package** for `dotnet new`. It contains no appli
 | `handys11-solution` | project | Full solution scaffold (slnx, Directory.Build.props, Directory.Packages.props, global.json, NuGet.config, .editorconfig, .gitignore, .vscode/) |
 | `handys11-editorconfig` | item | `.editorconfig` only |
 | `handys11-gitignore` | item | `.gitignore` + `.gitattributes` |
+| `handys11-github` | item | `.github/` — Dependabot config + Actions workflows (CI, CD, Sonar, Mutation, Documentation). Uses `sourceName` (`Project1`) so `--name` injects the solution name into the workflows |
 
 ### Template verification tests
 
