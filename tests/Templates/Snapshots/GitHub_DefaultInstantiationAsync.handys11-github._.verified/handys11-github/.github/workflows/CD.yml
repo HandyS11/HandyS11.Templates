@@ -1,4 +1,4 @@
-name: CD
+﻿name: CD
 
 permissions:
   contents: write
@@ -56,7 +56,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Pack NuGet Packages
-        run: dotnet pack HandyS11.Templates.slnx --configuration Release -p:Version=$VERSION
+        run: dotnet pack handys11_github.slnx --configuration Release -p:Version=$VERSION
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v7

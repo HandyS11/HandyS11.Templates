@@ -10,8 +10,16 @@ dotnet new install HandyS11.Templates
 
 ## Update
 
+`dotnet new update` checks **all** installed template packages for updates — it takes no package argument:
+
 ```bash
-dotnet new update HandyS11.Templates
+dotnet new update
+```
+
+To force a specific package to its latest version, reinstall it:
+
+```bash
+dotnet new install HandyS11.Templates
 ```
 
 ## Templates
@@ -72,6 +80,34 @@ A `.gitignore` item template tailored for .NET projects.
 
 ```bash
 dotnet new handys11-gitignore
+```
+
+---
+
+### `handys11-github` — GitHub Workflows
+
+An item template that scaffolds a `.github/` folder with GitHub Actions workflows and Dependabot configuration.
+
+| Type | Platforms               |
+|------|-------------------------|
+| Item | Windows · Linux · macOS |
+
+**Scaffolded files:**
+
+- `.github/dependabot.yml` — Dependabot version updates (NuGet, .NET SDK, GitHub Actions)
+- `.github/workflows/CI.yml` — build, format check & test on Ubuntu/Windows with coverage
+- `.github/workflows/CD.yml` — tag-driven (`v*`) NuGet pack, publish & GitHub Release
+- `.github/workflows/Sonar.yml` — SonarQube analysis (requires Sonar server + secrets)
+- `.github/workflows/Mutation.yml` — Stryker mutation testing (manual + weekly)
+- `.github/workflows/Documentation.yml` — DocFX build & GitHub Pages deploy
+
+Pass `--name` to inject the solution name into the workflows (`<Name>.slnx`); it defaults to the
+target folder name. Use the same name as `handys11-solution` for a matching pair.
+
+**Usage:**
+
+```bash
+dotnet new handys11-github --name <SolutionName>
 ```
 
 ---
