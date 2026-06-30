@@ -10,8 +10,16 @@ dotnet new install HandyS11.Templates
 
 ## Update
 
+`dotnet new update` checks **all** installed template packages for updates — it takes no package argument:
+
 ```bash
-dotnet new update HandyS11.Templates
+dotnet new update
+```
+
+To force a specific package to its latest version, reinstall it:
+
+```bash
+dotnet new install HandyS11.Templates
 ```
 
 ## Templates
