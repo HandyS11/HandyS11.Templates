@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <LangVersion>14</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -16,7 +15,6 @@
     <RepositoryUrl>https://github.com/HandyS11/HandyS11.Templates.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
-    <Version>0.1.0</Version>
     <IsPackable>true</IsPackable>
 
     <PackageType>Template</PackageType>
