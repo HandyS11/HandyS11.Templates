@@ -10,6 +10,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      nuget:
+        patterns:
+          - "*"
 
   # .NET SDK pin (global.json).
   - package-ecosystem: "dotnet-sdk"
