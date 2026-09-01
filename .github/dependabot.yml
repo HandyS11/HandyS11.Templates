@@ -10,6 +10,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      nuget:
+        patterns:
+          - "*"
 
   # GitHub Actions used by the CI / CD / CodeQL workflows.
   - package-ecosystem: "github-actions"
