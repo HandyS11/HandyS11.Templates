@@ -9,7 +9,7 @@
     <Title>HandyS11 Templates</Title>
     <Authors>HandyS11</Authors>
     <Copyright>Copyright(c) HandyS11</Copyright>
-    <Description>Some templates</Description>
+    <Description>dotnet new templates for .NET solutions: a solution scaffold with analyzers, central package management and local tooling, plus .editorconfig, .gitignore and GitHub Actions workflow item templates.</Description>
     <PackageTags>template;templates</PackageTags>
     <PackageProjectUrl>https://github.com/HandyS11/HandyS11.Templates</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HandyS11/HandyS11.Templates.git</RepositoryUrl>
