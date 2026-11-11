@@ -37,10 +37,12 @@ This repo is a **NuGet template package** for `dotnet new`. It contains no appli
 
 | Short name | Type | Description |
 |---|---|---|
-| `handys11-solution` | project | Full solution scaffold (slnx, Directory.Build.props, Directory.Packages.props, global.json, NuGet.config, .editorconfig, .gitignore, .vscode/) |
+| `handys11-solution` | project | Full solution scaffold (slnx + `.slnx.DotSettings` ReSharper cleanup profile, Directory.Build.props, Directory.Packages.props, global.json, NuGet.config, .editorconfig, .gitignore, .vscode/, `.config/dotnet-tools.json`, `.githooks/pre-push`, stryker-config.json, .markdownlint.json) |
 | `handys11-editorconfig` | item | `.editorconfig` only |
 | `handys11-gitignore` | item | `.gitignore` + `.gitattributes` |
-| `handys11-github` | item | `.github/` — Dependabot config + Actions workflows (CI, CD, Sonar, Mutation, Documentation). Uses `sourceName` (`Project1`) so `--name` injects the solution name into the workflows |
+| `handys11-github` | item | `.github/` — Dependabot config, release-notes categories (`release.yml`) + Actions workflows (CI, CD, Sonar, Mutation, Documentation, PR Labels). Uses `sourceName` (`Project1`) so `--name` injects the solution name into the workflows. The workflows rely on the tools manifest and `.DotSettings` shipped by `handys11-solution` |
+
+The `.editorconfig`, `.gitignore` and `.gitattributes` files exist twice (item template + solution template) and must be kept identical.
 
 ### Template verification tests
 

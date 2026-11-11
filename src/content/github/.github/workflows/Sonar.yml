@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - develop
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,19 +23,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v5
+      # The scanner engine needs Java 21 (SonarQube dropped Java 17 for analysis). `begin` passes
+      # sonar.scanner.skipJreProvisioning=true so the scanner runs on this JDK instead of downloading
+      # a JRE from the server — a timed-out download made it fall back to Java 17 and crash
+      # (`Pipe is broken`, exit 134). Temurin 21 is preinstalled on ubuntu-latest.
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
         with:
-          java-version: 17
-          distribution: 'zulu'
+          java-version: 21
+          distribution: 'temurin'
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
 
       - name: Cache SonarQube packages
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -42,7 +47,7 @@ jobs:
 
       - name: Cache SonarQube scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -56,7 +61,7 @@ jobs:
 
       - name: Build and analyze
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.exclusions="**/samples/**" /d:sonar.coverage.exclusions="**/samples/**,**/tests/**" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.scanner.skipJreProvisioning=true /d:sonar.exclusions="**/samples/**" /d:sonar.coverage.exclusions="**/samples/**,**/tests/**" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
           dotnet build
           dotnet test --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

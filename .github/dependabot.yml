@@ -15,8 +15,15 @@ updates:
         patterns:
           - "*"
 
-  # GitHub Actions used by the CI / CD / CodeQL workflows.
+  # GitHub Actions used by the CI / CD / CodeQL workflows, and by the workflows the
+  # handys11-github template ships (otherwise their action versions silently go stale).
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories:
+      - "/"
+      - "/src/content/github/.github/workflows"
     schedule:
       interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
