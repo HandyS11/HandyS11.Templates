@@ -32,6 +32,9 @@
       "exclude": [
         "**.template.config/**"
       ],
+      "copyOnly": [
+        "Directory.Build.props"
+      ],
       "modifiers": [
         {
           "replacements": {

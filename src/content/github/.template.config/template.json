@@ -9,7 +9,7 @@
   "identity": "HandyS11.github",
   "name": "GitHub Workflows",
   "shortName": "handys11-github",
-  "description": "GitHub Actions workflows (CI, CD, Sonar, Mutation, Documentation) and Dependabot configuration for the HandyS11 templates.",
+  "description": "GitHub Actions workflows (CI, CD, Sonar, Mutation, Documentation, PR Labels), release-notes categories and Dependabot configuration for the HandyS11 templates.",
   "tags": {
     "type": "item",
     "platform": [

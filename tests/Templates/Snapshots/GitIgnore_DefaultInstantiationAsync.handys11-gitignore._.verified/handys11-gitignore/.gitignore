@@ -6,15 +6,15 @@
 # dotenv files
 .env
 
-# DocFX
-**/_site/
-**/api/
+# DocFX generated output (scoped to docs/ so app folders named api/ are not ignored)
+docs/_site/
+docs/api/
+docs/obj/
 
 **.manifest
 **.pdf
 **.log
 **.mdd
-**.html
 **.cache
 **.tmp
 **.lnk
@@ -512,3 +512,13 @@ $RECYCLE.BIN/
 
 # Stryker.NET mutation testing output
 StrykerOutput/
+
+# SonarLint local state
+.sonarlint/
+
+# Scratch directories
+tmp/
+temp/
+
+# Superpowers subagent-driven-development scratch (ledger, briefs, review packages)
+.superpowers/

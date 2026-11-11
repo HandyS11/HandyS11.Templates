@@ -13,9 +13,28 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);NU1901;NU1902;NU1903;NU1904</NoWarn>
+    <!-- XML docs feed the DocFX API pages (Documentation workflow) and package IntelliSense.
+         Undocumented public members raise CS1591; .editorconfig turns it off for tests, samples and tools. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <!-- Point git at the committed hooks (.githooks/pre-push formats before pushing).
+       Idempotent and best-effort: skipped on CI and outside a git clone. The chmod restores the
+       executable bit, which `dotnet new` does not preserve, so git does not skip the hook. -->
+  <Target Name="ConfigureGitHooks" BeforeTargets="Build"
+          Condition="'$(CI)' == '' AND '$(ContinuousIntegrationBuild)' != 'true' AND Exists('$(MSBuildThisFileDirectory).git')">
+    <Exec Command="git config core.hooksPath .githooks"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          ContinueOnError="true"
+          StandardOutputImportance="low"
+          StandardErrorImportance="low" />
+    <Exec Command="chmod +x .githooks/pre-push"
+          Condition="'$(OS)' != 'Windows_NT'"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          ContinueOnError="true"
+          StandardOutputImportance="low"
+          StandardErrorImportance="low" />
+  </Target>
 
   <!-- Code Analyzers -->
   <ItemGroup>

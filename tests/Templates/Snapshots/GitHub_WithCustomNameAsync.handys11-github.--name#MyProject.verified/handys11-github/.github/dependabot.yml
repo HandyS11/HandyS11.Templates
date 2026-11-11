@@ -15,14 +15,16 @@ updates:
         patterns:
           - "*"
 
-  # .NET SDK pin (global.json).
-  - package-ecosystem: "dotnet-sdk"
-    directory: "/"
-    schedule:
-      interval: "weekly"
+  # No "dotnet-sdk" ecosystem: global.json's version is a floor, not a pin. With
+  # `rollForward: latestMinor` it accepts any newer installed .NET SDK; Dependabot would keep
+  # raising the floor and lock out contributors and runners on slightly older SDKs.
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
