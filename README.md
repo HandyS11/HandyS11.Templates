@@ -150,8 +150,8 @@ and a ServiceDefaults project, both under `tools/`.
     (the .NET 10 line), replacing any version already pinned;
   - the 5 `OpenTelemetry.*` packages take the latest stable version, and keep any version already pinned.
 
-These steps need network access. If one fails, `dotnet new` prints the command to run yourself — replace
-`<Name>` in it with your solution name.
+These steps need network access. If one fails, `dotnet new` prints the exact command to run yourself from the
+solution root.
 
 The projects inherit `TargetFramework`, `ImplicitUsings` and `Nullable` from the `Directory.Build.props` of
 `handys11-solution`, so use this template in a solution created with it.

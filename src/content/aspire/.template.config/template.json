@@ -208,9 +208,10 @@
       "description": "Add the Microsoft.Extensions.Http.Resilience package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package Microsoft.Extensions.Http.Resilience --version 10.11.0' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package Microsoft.Extensions.Http.Resilience --version 10.11.0' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -232,9 +233,10 @@
       "description": "Add the Microsoft.Extensions.ServiceDiscovery package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package Microsoft.Extensions.ServiceDiscovery --version 10.11.0' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package Microsoft.Extensions.ServiceDiscovery --version 10.11.0' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -256,9 +258,10 @@
       "description": "Add the OpenTelemetry.Exporter.OpenTelemetryProtocol package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Exporter.OpenTelemetryProtocol' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Exporter.OpenTelemetryProtocol' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -279,9 +282,10 @@
       "description": "Add the OpenTelemetry.Extensions.Hosting package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Extensions.Hosting' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Extensions.Hosting' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -302,9 +306,10 @@
       "description": "Add the OpenTelemetry.Instrumentation.AspNetCore package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.AspNetCore' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.AspNetCore' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -325,9 +330,10 @@
       "description": "Add the OpenTelemetry.Instrumentation.Http package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.Http' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.Http' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -348,9 +354,10 @@
       "description": "Add the OpenTelemetry.Instrumentation.Runtime package to the ServiceDefaults project.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.Runtime' from the solution root."
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.Runtime' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
       "continueOnError": true,
       "applyFileRenamesToArgs": [
@@ -371,9 +378,10 @@
       "description": "Add the AppHost and ServiceDefaults projects to the solution, under the tools folder.",
       "manualInstructions": [
         {
-          "text": "Run 'dotnet sln add tools/<Name>.Aspire tools/<Name>.ServiceDefaults --solution-folder tools'."
+          "text": "Run 'dotnet sln add tools/Project1.Aspire/Project1.Aspire.csproj tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj --solution-folder tools' from the solution root."
         }
       ],
+      "applyFileRenamesToManualInstructions": true,
       "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
       "continueOnError": true,
       "args": {

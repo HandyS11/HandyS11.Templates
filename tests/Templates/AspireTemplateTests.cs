@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.TemplateEngine.Authoring.TemplateVerifier;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace HandyS11.Templates.Tests.Templates;
@@ -59,6 +60,42 @@ public partial class AspireTemplateTests
         await engine.Execute(options);
 
         AssertUserSecretsIdRegenerated(userSecretsIds);
+    }
+
+    // The snapshot tests skip the post-actions (--files-only), so their fallback text is checked here: a failed
+    // post-action prints it for the user to copy-paste, so it must name the real generated paths (renamed by the
+    // engine from Project1), the package id, and its pinned version.
+    [Fact]
+    public void PostActions_ManualInstructionsAreRunnableCommands()
+    {
+        using var template = JsonDocument.Parse(
+            File.ReadAllText(Path.Combine(TemplatePath, ".template.config", "template.json")));
+        JsonElement[] postActions = [.. template.RootElement.GetProperty("postActions").EnumerateArray()];
+
+        Assert.Equal(8, postActions.Length);
+        foreach (var action in postActions)
+        {
+            Assert.True(action.GetProperty("applyFileRenamesToManualInstructions").GetBoolean());
+            var text = action.GetProperty("manualInstructions")[0].GetProperty("text").GetString()!;
+            Assert.DoesNotContain("<", text, StringComparison.Ordinal);
+            Assert.Contains("tools/Project1.", text, StringComparison.Ordinal);
+
+            var args = action.GetProperty("args");
+            if (!args.TryGetProperty("reference", out var reference))
+            {
+                continue;
+            }
+
+            Assert.Contains($" package {reference.GetString()}", text, StringComparison.Ordinal);
+            if (args.TryGetProperty("version", out var version))
+            {
+                Assert.Contains($" --version {version.GetString()}", text, StringComparison.Ordinal);
+            }
+            else
+            {
+                Assert.DoesNotContain("--version", text, StringComparison.Ordinal);
+            }
+        }
     }
 
     // The UserSecretsId is a new GUID on every instantiation: record it, then replace it so the snapshot is stable.
