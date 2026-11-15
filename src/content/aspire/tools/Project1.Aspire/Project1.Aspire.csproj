@@ -1,0 +1,10 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <UserSecretsId>c7c079e4-191d-478f-8ed2-6559fc6cab16</UserSecretsId>
+        <!-- Use the Dashboard/DCP NuGet packages so `dotnet run` works without the Aspire CLI installed. -->
+        <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
+    </PropertyGroup>
+
+</Project>
