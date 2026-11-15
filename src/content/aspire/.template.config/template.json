@@ -39,6 +39,9 @@
   "primaryOutputs": [
     {
       "path": "tools/Project1.Aspire/Project1.Aspire.csproj"
+    },
+    {
+      "path": "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
     }
   ],
   "symbols": {
@@ -197,5 +200,186 @@
       },
       "replaces": "22000"
     }
-  }
+  },
+  "postActions": [
+    {
+      "id": "add-package-Microsoft.Extensions.Http.Resilience",
+      "condition": "(!filesOnly)",
+      "description": "Add the Microsoft.Extensions.Http.Resilience package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package Microsoft.Extensions.Http.Resilience --version 10.11.0' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "Microsoft.Extensions.Http.Resilience",
+        "version": "10.11.0",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-Microsoft.Extensions.ServiceDiscovery",
+      "condition": "(!filesOnly)",
+      "description": "Add the Microsoft.Extensions.ServiceDiscovery package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package Microsoft.Extensions.ServiceDiscovery --version 10.11.0' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "Microsoft.Extensions.ServiceDiscovery",
+        "version": "10.11.0",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Exporter.OpenTelemetryProtocol",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Exporter.OpenTelemetryProtocol package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Exporter.OpenTelemetryProtocol' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Extensions.Hosting",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Extensions.Hosting package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Extensions.Hosting' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Extensions.Hosting",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.AspNetCore",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.AspNetCore package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.AspNetCore' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.AspNetCore",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.Http",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.Http package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.Http' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.Http",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.Runtime",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.Runtime package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/<Name>.ServiceDefaults package OpenTelemetry.Instrumentation.Runtime' from the solution root."
+        }
+      ],
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.Runtime",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-projects-to-solution",
+      "condition": "(!filesOnly)",
+      "description": "Add the AppHost and ServiceDefaults projects to the solution, under the tools folder.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet sln add tools/<Name>.Aspire tools/<Name>.ServiceDefaults --solution-folder tools'."
+        }
+      ],
+      "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
+      "continueOnError": true,
+      "args": {
+        "primaryOutputIndexes": "0;1",
+        "solutionFolder": "tools"
+      }
+    }
+  ]
 }
