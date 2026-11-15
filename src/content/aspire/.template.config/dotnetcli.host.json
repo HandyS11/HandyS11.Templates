@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json.schemastore.org/dotnetcli.host",
+  "symbolInfo": {
+    "filesOnly": {
+      "longName": "files-only",
+      "shortName": ""
+    },
+    "appHostHttpPort": {
+      "isHidden": true
+    },
+    "appHostHttpsPort": {
+      "isHidden": true
+    },
+    "appHostOtlpHttpPort": {
+      "isHidden": true
+    },
+    "appHostOtlpHttpsPort": {
+      "isHidden": true
+    },
+    "appHostResourceHttpPort": {
+      "isHidden": true
+    },
+    "appHostResourceHttpsPort": {
+      "isHidden": true
+    }
+  }
+}

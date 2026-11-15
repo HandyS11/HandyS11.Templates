@@ -41,6 +41,7 @@ This repo is a **NuGet template package** for `dotnet new`. It contains no appli
 | `handys11-editorconfig` | item | `.editorconfig` only |
 | `handys11-gitignore` | item | `.gitignore` + `.gitattributes` |
 | `handys11-github` | item | `.github/` — Dependabot config, release-notes categories (`release.yml`) + Actions workflows (CI, CD, Sonar, Mutation, Documentation, PR Labels). Uses `sourceName` (`Project1`) so `--name` injects the solution name into the workflows. The workflows rely on the tools manifest and `.DotSettings` shipped by `handys11-solution` |
+| `handys11-aspire` | project | `tools/<Name>.Aspire` AppHost + `tools/<Name>.ServiceDefaults`, run from a `handys11-solution` root (inherits its `Directory.Build.props`). Uses `sourceName` (`Project1`); post-actions run `dotnet add package` (CPM writes the versions into the root `Directory.Packages.props`) and `dotnet sln add` (`/tools/` folder). `--files-only` skips all post-actions — the snapshot tests use it, with fixed ports, to stay offline and deterministic. Pins bumped by hand: `Aspire.AppHost.Sdk/13.6.5` (AppHost csproj) and `Microsoft.Extensions.Http.Resilience`/`ServiceDiscovery` `10.11.0` (template.json); the `OpenTelemetry.*` packages are unpinned (latest stable) |
 
 The `.editorconfig`, `.gitignore` and `.gitattributes` files exist twice (item template + solution template) and must be kept identical.
 

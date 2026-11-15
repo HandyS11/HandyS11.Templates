@@ -124,6 +124,67 @@ dotnet new handys11-github --name <SolutionName>
 
 ---
 
+### `handys11-aspire` — Aspire AppHost & ServiceDefaults
+
+A project template that adds .NET Aspire to a solution created with `handys11-solution`: an AppHost
+and a ServiceDefaults project, both under `tools/`.
+
+| Type    | Language | Platforms               |
+|---------|----------|-------------------------|
+| Project | C#       | Windows · Linux · macOS |
+
+**Scaffolded files:**
+
+- `tools/<Name>.Aspire/` — the AppHost (`Aspire.AppHost.Sdk/13.6.5`): `AppHost.cs`, `appsettings.json`,
+  `aspire.config.json` (for the Aspire CLI) and `Properties/launchSettings.json` (`https` and `http` profiles,
+  ports picked at random per solution). `dotnet run` works without the Aspire CLI installed.
+- `tools/<Name>.ServiceDefaults/` — `AddServiceDefaults()` (OpenTelemetry, health checks, service discovery,
+  resilient HTTP clients) and `MapDefaultEndpoints()` (`/health` and `/alive`, in Development only)
+
+**After creating the files, the template:**
+
+- adds both projects to the `.slnx`, under a `/tools/` solution folder;
+- runs `dotnet add package` for the 7 ServiceDefaults packages, which writes their versions into the root
+  `Directory.Packages.props`:
+  - `Microsoft.Extensions.Http.Resilience` and `Microsoft.Extensions.ServiceDiscovery` are pinned to `10.11.0`
+    (the .NET 10 line), replacing any version already pinned;
+  - the 5 `OpenTelemetry.*` packages take the latest stable version, and keep any version already pinned.
+
+These steps need network access. If one fails, `dotnet new` prints the exact command to run yourself from the
+solution root.
+
+The projects inherit `TargetFramework`, `ImplicitUsings` and `Nullable` from the `Directory.Build.props` of
+`handys11-solution`, so use this template in a solution created with it.
+
+**Usage:**
+
+Run it **from the solution root** (the folder with the `.slnx`), with the solution name:
+
+```bash
+dotnet new handys11-aspire --name <SolutionName>
+```
+
+`--name` defaults to the current folder name. Add `--files-only` to only write the files (offline use), then
+finish the setup by hand:
+
+```bash
+dotnet sln add tools/<SolutionName>.Aspire tools/<SolutionName>.ServiceDefaults --solution-folder tools
+dotnet add tools/<SolutionName>.ServiceDefaults package Microsoft.Extensions.Http.Resilience --version 10.11.0
+dotnet add tools/<SolutionName>.ServiceDefaults package Microsoft.Extensions.ServiceDiscovery --version 10.11.0
+dotnet add tools/<SolutionName>.ServiceDefaults package OpenTelemetry.Exporter.OpenTelemetryProtocol
+dotnet add tools/<SolutionName>.ServiceDefaults package OpenTelemetry.Extensions.Hosting
+dotnet add tools/<SolutionName>.ServiceDefaults package OpenTelemetry.Instrumentation.AspNetCore
+dotnet add tools/<SolutionName>.ServiceDefaults package OpenTelemetry.Instrumentation.Http
+dotnet add tools/<SolutionName>.ServiceDefaults package OpenTelemetry.Instrumentation.Runtime
+```
+
+To wire a service in, reference `tools/<SolutionName>.ServiceDefaults` from it, call
+`builder.AddServiceDefaults()` on its builder and `app.MapDefaultEndpoints()` on its app, then add it to
+`AppHost.cs` with `builder.AddProject<Projects.YourService>("yourservice")` (the AppHost also needs a
+`ProjectReference` to the service).
+
+---
+
 ## Uninstallation
 
 ```bash

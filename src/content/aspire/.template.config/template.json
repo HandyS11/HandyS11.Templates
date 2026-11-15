@@ -1,0 +1,393 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "HandyS11",
+  "owner": "HandyS11",
+  "classifications": [
+    "Cloud",
+    "Aspire"
+  ],
+  "identity": "HandyS11.Aspire",
+  "name": "Aspire AppHost & ServiceDefaults",
+  "shortName": "handys11-aspire",
+  "description": "An Aspire AppHost and ServiceDefaults project under tools/, for a solution created with handys11-solution.",
+  "tags": {
+    "language": "C#",
+    "type": "project",
+    "platform": [
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "capability": [
+      "starter-kit",
+      "cross-platform"
+    ]
+  },
+  "sourceName": "Project1",
+  "preferNameDirectory": false,
+  "icon": "../icon.png",
+  "guids": [
+    "c7c079e4-191d-478f-8ed2-6559fc6cab16"
+  ],
+  "sources": [
+    {
+      "exclude": [
+        "**/.template.config/**"
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "path": "tools/Project1.Aspire/Project1.Aspire.csproj"
+    },
+    {
+      "path": "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+    }
+  ],
+  "symbols": {
+    "filesOnly": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Only write the files: skip adding the ServiceDefaults NuGet packages and adding the projects to the solution."
+    },
+    "appHostProjectFile": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          {
+            "type": "ref",
+            "value": "name"
+          },
+          {
+            "type": "const",
+            "value": ".Aspire.csproj"
+          }
+        ]
+      },
+      "replaces": "Project1.Aspire.csproj"
+    },
+    "appHostHttpPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the AppHost HTTP endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostHttpPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 15000,
+        "high": 15300
+      }
+    },
+    "appHostHttpPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostHttpPort",
+        "fallbackVariableName": "appHostHttpPortGenerated"
+      },
+      "replaces": "15000"
+    },
+    "appHostHttpsPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the AppHost HTTPS endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostHttpsPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 17000,
+        "high": 17300
+      }
+    },
+    "appHostHttpsPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostHttpsPort",
+        "fallbackVariableName": "appHostHttpsPortGenerated"
+      },
+      "replaces": "17000"
+    },
+    "appHostOtlpHttpPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the dashboard OTLP HTTP endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostOtlpHttpPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 19000,
+        "high": 19300
+      }
+    },
+    "appHostOtlpHttpPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostOtlpHttpPort",
+        "fallbackVariableName": "appHostOtlpHttpPortGenerated"
+      },
+      "replaces": "19000"
+    },
+    "appHostOtlpHttpsPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the dashboard OTLP HTTPS endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostOtlpHttpsPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 21000,
+        "high": 21300
+      }
+    },
+    "appHostOtlpHttpsPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostOtlpHttpsPort",
+        "fallbackVariableName": "appHostOtlpHttpsPortGenerated"
+      },
+      "replaces": "21000"
+    },
+    "appHostResourceHttpPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the resource service HTTP endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostResourceHttpPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 20000,
+        "high": 20300
+      }
+    },
+    "appHostResourceHttpPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostResourceHttpPort",
+        "fallbackVariableName": "appHostResourceHttpPortGenerated"
+      },
+      "replaces": "20000"
+    },
+    "appHostResourceHttpsPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "description": "Port number to use for the resource service HTTPS endpoint in launchSettings.json of the AppHost project."
+    },
+    "appHostResourceHttpsPortGenerated": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "low": 22000,
+        "high": 22300
+      }
+    },
+    "appHostResourceHttpsPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "appHostResourceHttpsPort",
+        "fallbackVariableName": "appHostResourceHttpsPortGenerated"
+      },
+      "replaces": "22000"
+    }
+  },
+  "postActions": [
+    {
+      "id": "add-package-Microsoft.Extensions.Http.Resilience",
+      "condition": "(!filesOnly)",
+      "description": "Add the Microsoft.Extensions.Http.Resilience package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package Microsoft.Extensions.Http.Resilience --version 10.11.0' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "Microsoft.Extensions.Http.Resilience",
+        "version": "10.11.0",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-Microsoft.Extensions.ServiceDiscovery",
+      "condition": "(!filesOnly)",
+      "description": "Add the Microsoft.Extensions.ServiceDiscovery package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package Microsoft.Extensions.ServiceDiscovery --version 10.11.0' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "Microsoft.Extensions.ServiceDiscovery",
+        "version": "10.11.0",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Exporter.OpenTelemetryProtocol",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Exporter.OpenTelemetryProtocol package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Exporter.OpenTelemetryProtocol' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Extensions.Hosting",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Extensions.Hosting package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Extensions.Hosting' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Extensions.Hosting",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.AspNetCore",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.AspNetCore package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.AspNetCore' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.AspNetCore",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.Http",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.Http package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.Http' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.Http",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-package-OpenTelemetry.Instrumentation.Runtime",
+      "condition": "(!filesOnly)",
+      "description": "Add the OpenTelemetry.Instrumentation.Runtime package to the ServiceDefaults project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet add tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj package OpenTelemetry.Instrumentation.Runtime' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+      "continueOnError": true,
+      "applyFileRenamesToArgs": [
+        "targetFiles"
+      ],
+      "args": {
+        "referenceType": "package",
+        "reference": "OpenTelemetry.Instrumentation.Runtime",
+        "projectFileExtensions": ".csproj",
+        "targetFiles": [
+          "tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj"
+        ]
+      }
+    },
+    {
+      "id": "add-projects-to-solution",
+      "condition": "(!filesOnly)",
+      "description": "Add the AppHost and ServiceDefaults projects to the solution, under the tools folder.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet sln add tools/Project1.Aspire/Project1.Aspire.csproj tools/Project1.ServiceDefaults/Project1.ServiceDefaults.csproj --solution-folder tools' from the solution root."
+        }
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
+      "continueOnError": true,
+      "args": {
+        "primaryOutputIndexes": "0;1",
+        "solutionFolder": "tools"
+      }
+    }
+  ]
+}
