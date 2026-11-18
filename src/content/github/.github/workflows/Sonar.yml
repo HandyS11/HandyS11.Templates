@@ -17,29 +17,34 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      # Codecov uploads authenticate through OIDC (use_oidc), not a stored token.
+      id-token: write
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       # The scanner engine needs Java 21 (SonarQube dropped Java 17 for analysis). `begin` passes
       # sonar.scanner.skipJreProvisioning=true so the scanner runs on this JDK instead of downloading
       # a JRE from the server — a timed-out download made it fall back to Java 17 and crash
       # (`Pipe is broken`, exit 134). Temurin 21 is preinstalled on ubuntu-latest.
       - name: Set up JDK 21
-        uses: actions/setup-java@v6
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           java-version: 21
           distribution: 'temurin'
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: 10.0.x
 
       - name: Cache SonarQube packages
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -47,7 +52,7 @@ jobs:
 
       - name: Cache SonarQube scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -59,21 +64,51 @@ jobs:
           mkdir -p ./.sonar/scanner
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
 
-      - name: Build and analyze
-        run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.scanner.skipJreProvisioning=true /d:sonar.exclusions="**/samples/**" /d:sonar.coverage.exclusions="**/samples/**,**/tests/**" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
-          dotnet build
-          dotnet test --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      - name: Begin analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: ./.sonar/scanner/dotnet-sonarscanner begin /k:"$SONAR_PROJECT_KEY" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.scanner.skipJreProvisioning=true /d:sonar.exclusions="**/samples/**" /d:sonar.coverage.exclusions="**/samples/**,**/tests/**" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
+      - name: Build
+        run: dotnet build
+
+      # Tests by kind, as in CI.yml. The end-to-end tests are left out: they start the Aspire AppHost, which would take
+      # most of this job's timeout, and CI.yml runs them in a job of their own.
+      - name: Unit tests
+        if: hashFiles('tests/Project1.UnitTests/Project1.UnitTests.csproj') != ''
+        run: dotnet test tests/Project1.UnitTests/Project1.UnitTests.csproj --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
+
+      - name: Integration tests
+        if: hashFiles('tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj') != ''
+        run: dotnet test tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
+
+      - name: Acceptance tests
+        if: hashFiles('tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj') != ''
+        run: dotnet test tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
+
+      - name: Tests (no kind layout found)
+        if: >-
+          hashFiles('tests/Project1.UnitTests/Project1.UnitTests.csproj',
+          'tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj',
+          'tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj',
+          'tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') == ''
+        run: dotnet test --no-build --collect:"XPlat Code Coverage;Format=opencover" --blame-hang-timeout 60s
+
+      - name: End analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           report_type: test_results

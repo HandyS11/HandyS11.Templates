@@ -10,18 +10,26 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Tests run by kind, one project each: tests/Project1.UnitTests, .IntegrationTests, .AcceptanceTests and
+# .EndToEndTests. A step whose project does not exist is skipped (hashFiles, in the step: a job-level `if:` runs before
+# the checkout). Integration, acceptance and end-to-end tests start containers, which Windows runners cannot run, so
+# they run on Linux only. A repository with none of the four projects runs its whole suite in the build job instead.
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    # A run takes 2 to 5 minutes, Windows being the slower one.
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: '10.0.x'
           cache: true
@@ -43,13 +51,88 @@ jobs:
           dotnet jb cleanupcode Project1.slnx --profile="ReformatAndReorder" --no-build --verbosity=ERROR
           git diff --exit-code
 
-      - name: Test
+      - name: Unit tests
+        if: hashFiles('tests/Project1.UnitTests/Project1.UnitTests.csproj') != ''
+        run: dotnet test tests/Project1.UnitTests/Project1.UnitTests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+      # Without this fallback, a repository with a different test layout (a single <Name>.Tests project) would run no
+      # tests at all and still go green.
+      - name: Tests (no kind layout found)
+        if: >-
+          hashFiles('tests/Project1.UnitTests/Project1.UnitTests.csproj',
+          'tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj',
+          'tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj',
+          'tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') == ''
         run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
 
       - name: Upload coverage reports
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: coverage-reports
           path: ./coverage/**/coverage.cobertura.xml
           retention-days: 14
+
+  # The test jobs skip the analyzers: the build job already runs them over the whole solution.
+  integration:
+    name: Integration and acceptance tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        if: >-
+          hashFiles('tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj',
+          'tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj') != ''
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Integration tests
+        if: hashFiles('tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj') != ''
+        run: dotnet test tests/Project1.IntegrationTests/Project1.IntegrationTests.csproj --configuration Release --verbosity normal -p:RunAnalyzers=false
+
+      - name: Acceptance tests
+        if: hashFiles('tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj') != ''
+        run: dotnet test tests/Project1.AcceptanceTests/Project1.AcceptanceTests.csproj --configuration Release --verbosity normal -p:RunAnalyzers=false
+
+  end-to-end:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        if: hashFiles('tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') != ''
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Build
+        if: hashFiles('tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') != ''
+        run: dotnet build tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj --configuration Release -p:RunAnalyzers=false
+
+      # The AppHost serves HTTPS. On Linux, trusting the development certificate means trusting it for OpenSSL. Exit code
+      # 4 means "trusted by some clients only": the runner has no browser certificate store, so it is expected.
+      - name: Trust the HTTPS development certificate
+        if: hashFiles('tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') != ''
+        run: |
+          dotnet dev-certs https --trust || [ $? -eq 4 ]
+          trust="$HOME/.aspnet/dev-certs/trust"
+          echo "SSL_CERT_DIR=$trust:/usr/lib/ssl/certs" >> "$GITHUB_ENV"
+
+      # Shorter than the job, so a hung AppHost fails the step instead of using up the whole job.
+      - name: End-to-end tests
+        if: hashFiles('tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj') != ''
+        timeout-minutes: 20
+        run: dotnet test tests/Project1.EndToEndTests/Project1.EndToEndTests.csproj --no-build --configuration Release --verbosity normal

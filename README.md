@@ -42,7 +42,7 @@ A starter kit that scaffolds a new solution folder pre-configured with common pr
 - `NuGet.config` — NuGet feed configuration
 - `.config/dotnet-tools.json` — local tools: ReSharper CLI (`jb`), Stryker, DocFX
 - `.githooks/pre-push` — blocks a push when ReSharper cleanup would change the pushed files
-- `stryker-config.json` — Stryker mutation testing settings
+- `stryker-config.json` — Stryker mutation testing settings (Microsoft Testing Platform runner)
 - `.markdownlint.json` — Markdown lint rules
 - `.editorconfig` — code style settings
 - `.gitignore` — Git ignore rules
@@ -105,16 +105,27 @@ categories and Dependabot configuration.
 
 - `.github/dependabot.yml` — weekly Dependabot updates, one grouped PR each for NuGet and GitHub Actions
 - `.github/release.yml` — groups generated release notes by PR label (Features, Fixes, Documentation, Dependencies, Internal)
-- `.github/workflows/CI.yml` — build, ReSharper format check & test on Ubuntu/Windows with coverage
+- `.github/workflows/CI.yml` — build, ReSharper format check & unit tests on Ubuntu/Windows with coverage, then
+  integration, acceptance and end-to-end tests in Linux-only jobs
 - `.github/workflows/CD.yml` — tag-driven (`v*`) NuGet pack, publish & GitHub Release
-- `.github/workflows/Sonar.yml` — SonarQube analysis (requires Sonar server + secrets)
-- `.github/workflows/Mutation.yml` — Stryker mutation testing (manual + weekly)
+- `.github/workflows/Sonar.yml` — SonarQube analysis (requires Sonar server + secrets) and Codecov upload (OIDC, no token)
+- `.github/workflows/Mutation.yml` — Stryker mutation testing against the unit tests, one run per project they
+  reference (manual + weekly)
 - `.github/workflows/Documentation.yml` — DocFX build & GitHub Pages deploy
 - `.github/workflows/PrLabels.yml` — labels each PR from its Conventional Commits title (`feat`, `fix`, `docs`)
 
 Pass `--name` to inject the solution name into the workflows (`<Name>.slnx`); it defaults to the
 target folder name. Use the same name as `handys11-solution` for a matching pair: the workflows run
-the local tools and the ReSharper cleanup profile that `handys11-solution` ships.
+the local tools, the ReSharper cleanup profile and the Stryker settings that `handys11-solution` ships.
+
+The workflows run tests by kind, one project each: `tests/<Name>.UnitTests`, `.IntegrationTests`,
+`.AcceptanceTests` and `.EndToEndTests`. A step whose project does not exist is skipped. A solution with
+none of the four runs its whole suite in one step instead, as before. Mutation testing sets the
+`MutationTesting` MSBuild property, on which the unit project switches from `xunit.v3.mtp-off` to
+`xunit.v3`: Stryker's Microsoft Testing Platform runner needs the latter.
+
+Every action is pinned to a full commit hash with an exact-version comment, which Dependabot keeps
+current. Workflows default to read-only permissions and widen them per job, and every job has a timeout.
 
 **Usage:**
 

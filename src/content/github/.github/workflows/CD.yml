@@ -1,9 +1,7 @@
 name: CD
 
 permissions:
-  contents: write
-  packages: write
-  id-token: write
+  contents: read
 
 on:
   push:
@@ -13,10 +11,18 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # A run takes 1 to 2 minutes.
+    timeout-minutes: 15
+    permissions:
+      contents: write # gh release create
+      packages: write # GitHub Packages push
+      id-token: write # NuGet trusted publishing (NuGet/login)
 
     steps:
+      # The credentials stay (no persist-credentials: false): Verify Tag Branch runs `git fetch origin main develop`,
+      # which needs them on a private repository.
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -51,20 +57,20 @@ jobs:
           fi
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: 10.0.x
 
       - name: Pack NuGet Packages
-        run: dotnet pack Project1.slnx --configuration Release -p:Version=$VERSION
+        run: dotnet pack Project1.slnx --configuration Release -p:Version="$VERSION"
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           path: ./**/*.nupkg
 
       - name: NuGet login (trusted publishing)
-        uses: NuGet/login@v1
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         id: login
         with:
           user: HandyS11
