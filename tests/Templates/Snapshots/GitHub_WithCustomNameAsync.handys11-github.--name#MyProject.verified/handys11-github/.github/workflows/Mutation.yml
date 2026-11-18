@@ -10,16 +10,116 @@ on:
   schedule:
     - cron: "0 3 * * 1" # Mondays 03:00 UTC
 
+# Mutants run against the unit tests only (tests/MyProject.UnitTests): integration, acceptance and end-to-end tests start
+# containers, and re-running them for every mutant would take hours. Stryker mutates one project per run, so `projects`
+# lists the projects the unit tests reference, and `unit` runs Stryker once for each. A repository with none of the four
+# test projects (CI.yml) mutates its whole solution instead.
 jobs:
-  stryker:
-    name: Stryker mutation testing
+  projects:
+    name: Projects to mutate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      layout: ${{ steps.list.outputs.layout }}
+      projects: ${{ steps.list.outputs.projects }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        if: hashFiles('tests/MyProject.UnitTests/MyProject.UnitTests.csproj') != ''
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: List the projects to mutate
+        id: list
+        run: |
+          layout=false
+          for kind in UnitTests IntegrationTests AcceptanceTests EndToEndTests; do
+            if [ -f "tests/MyProject.$kind/MyProject.$kind.csproj" ]; then
+              layout=true
+            fi
+          done
+          projects='[]'
+          unit=tests/MyProject.UnitTests/MyProject.UnitTests.csproj
+          if [ -f "$unit" ]; then
+            # Every project the unit tests reference, except the test helpers under tests/.
+            dotnet msbuild "$unit" -getItem:ProjectReference -getResultOutputFile:"$RUNNER_TEMP/references.json"
+            projects="$(jq -c --arg tests "$GITHUB_WORKSPACE/tests/" \
+              '[.Items.ProjectReference // [] | .[] | select(.FullPath | startswith($tests) | not) | .Filename + .Extension]' \
+              "$RUNNER_TEMP/references.json")"
+          fi
+          echo "layout=$layout" >> "$GITHUB_OUTPUT"
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+          echo "Kind layout: $layout. Projects to mutate: $projects"
+
+  unit:
+    name: Stryker (${{ matrix.project }})
+    needs: projects
+    if: needs.projects.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.projects.outputs.projects) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Stryker
+        working-directory: tests/MyProject.UnitTests
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+          PROJECT: ${{ matrix.project }}
+          REF_NAME: ${{ github.ref_name }}
+          # The unit project switches from xunit.v3.mtp-off to xunit.v3 on this property: Stryker activates mutants in
+          # an xUnit v3 test process only through its Microsoft Testing Platform runner (stryker-config.json).
+          MutationTesting: true
+        # One dashboard module per project: without one, each project's report would replace the previous one.
+        run: |
+          jq --arg module "${PROJECT%.csproj}" '."stryker-config"."project-info".module = $module' \
+            ../../stryker-config.json > "$RUNNER_TEMP/stryker-config.json"
+          dotnet stryker \
+            --config-file "$RUNNER_TEMP/stryker-config.json" \
+            --project "$PROJECT" \
+            --version "$REF_NAME" \
+            --reporter cleartext \
+            --reporter html \
+            --reporter dashboard
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: stryker-report-${{ matrix.project }}
+          path: tests/MyProject.UnitTests/StrykerOutput/**/reports/mutation-report.html
+          if-no-files-found: ignore
+
+  solution:
+    name: Stryker (no kind layout found)
+    needs: projects
+    if: needs.projects.outputs.layout == 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: 10.0.x
 
@@ -29,17 +129,18 @@ jobs:
       - name: Stryker
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+          REF_NAME: ${{ github.ref_name }}
         run: >
           dotnet stryker
           --solution MyProject.slnx
-          --version ${{ github.ref_name }}
+          --version "$REF_NAME"
           --reporter cleartext
           --reporter html
           --reporter dashboard
 
       - name: Upload mutation report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: stryker-report
           path: '**/StrykerOutput/**/reports/mutation-report.html'
